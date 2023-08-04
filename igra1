@@ -1,0 +1,96 @@
+from machine import Pin, ADC
+import utime
+import random
+
+# Define constants for LED colors
+LED_COLORS = ['red', 'green', 'blue', 'yellow']
+
+# Initialize hardware pins
+xAxis = ADC(Pin(27))
+yAxis = ADC(Pin(26))
+button = Pin(16, Pin.IN, Pin.PULL_UP)
+
+led_left = Pin(14, Pin.OUT)
+led_middle = Pin(15, Pin.OUT)
+led_right = Pin(12, Pin.OUT)
+led_up = Pin(18, Pin.OUT)
+led_down = Pin(13, Pin.OUT)
+
+# Function to light up an LED for a short duration
+def light_led(led_pin):
+    led_pin.value(1)
+    utime.sleep(0.5)
+    led_pin.value(0)
+    utime.sleep(0.2)
+
+# Function to play a round of Simon Says
+def play_round(led_pins, num_sequences):
+    sequence = []
+    
+    for _ in range(num_sequences):
+        color = random.choice(LED_COLORS)
+        sequence.append(color)
+        
+        for color_index, led_pin in enumerate(led_pins):
+            if color == LED_COLORS[color_index]:
+                light_led(led_pin)
+    
+    return sequence
+
+# Main game loop
+level = 1
+while True:
+    print("Simon Says Game - Level", level)
+    
+    # Get the number of sequences for this level
+    num_sequences = level
+    
+    # Play the round for the current level
+    round_sequence = play_round([led_left, led_right, led_up, led_down], num_sequences)
+    
+    print("Watch the sequence and repeat it!")
+    
+    # Display the sequence for the player to repeat
+    for color in round_sequence:
+        led_pin = [led_left, led_right, led_up, led_down][LED_COLORS.index(color)]
+        light_led(led_pin)
+        utime.sleep(0.5)
+    
+    print("Your turn to repeat the sequence!")
+    
+    # Player's turn to repeat the sequence using the joystick
+    for color in round_sequence:
+        while True:
+            x_value = xAxis.read_u16()
+            y_value = yAxis.read_u16()
+            
+            if x_value <= 600:
+                led_left.value(1)
+            elif x_value >= 60000:
+                led_right.value(1)
+            elif y_value <= 600:
+                led_up.value(1)
+            elif y_value >= 60000:
+                led_down.value(1)
+            else:
+                led_left.value(0)
+                led_right.value(0)
+                led_up.value(0)
+                led_down.value(0)
+            
+            if button.value() == 0:
+                if color == round_sequence[round_sequence.index(color)]:
+                    led_pin = [led_left, led_right, led_up, led_down][LED_COLORS.index(color)]
+                    light_led(led_pin)
+                    break
+                else:
+                    print("Wrong color! Game over.")
+                    exit(0)  # End the game on a wrong input
+
+    print("Congratulations! You passed this level.")
+    # Add feedback for passing (e.g., all LEDs lighting up)
+    for led_pin in [led_left, led_right, led_up, led_down]:
+        light_led(led_pin)
+
+    utime.sleep(2)  # Delay before starting the next level
+    level += 1
