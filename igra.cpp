@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
 
 // Define constants for LED colors
 const std::vector<std::string> LED_COLORS = {"red", "green", "blue", "yellow"};
