@@ -5,10 +5,8 @@
 #include <cstdlib>
 #include <ctime>
 
-// Define constants for LED colors
 const std::vector<std::string> LED_COLORS = {"crvena", "zelena", "plava", "zuta"};
 
-// Initialize hardware pins
 const int xAxisPin = 2;   // GPIO 2 (Physical pin 3)
 const int yAxisPin = 3;   // GPIO 3 (Physical pin 5)
 const int buttonPin = 4;  // GPIO 4 (Physical pin 7)
