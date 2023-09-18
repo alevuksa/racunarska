@@ -101,20 +101,20 @@ int main() {
                         lightLed(ledPins[ledPinIndex]);
                         break;
                     } else {
-                        std::cout << "Wrong color! Game over." << std::endl;
+                        std::cout << "Pogrešna boja! Game over." << std::endl;
                         return 0;  // End the game on a wrong input
                     }
                 }
             }
         }
         
-        std::cout << "Cestitke! Presli ste nivo." << std::endl;
+        std::cout << "Čestitke! Prešli ste nivo." << std::endl;
         // Add feedback for passing (e.g., all LEDs lighting up)
         for (int ledPin : ledPins) {
             lightLed(ledPin);
         }
         
-        delay(2000);  // Delay before starting the next level
+        delay(2000);  
         level++;
     }
 
