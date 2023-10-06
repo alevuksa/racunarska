@@ -4,9 +4,7 @@
 #include <wiringPiI2C.h>
 #include <time.h>
 
-/*
- * Kompajlira se sa: gcc proj.c -o proj -lwiringPi -lwiringPiDev
- */
+
 
 #define	LED0	0
 #define	LED1	1
